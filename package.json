@@ -12,17 +12,35 @@
   "scripts": {
     "build": "nwb build-web-module",
     "clean": "nwb clean-module",
-    "test": "nwb test",
-    "test:coverage": "nwb test --coverage",
-    "test:watch": "nwb test --server"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "coverage:watch": "jest --coverage --watch"
   },
   "dependencies": {
+    "lodash-es": "^4.17.4",
+    "type-detect": "^4.0.7"
   },
   "devDependencies": {
-    "nwb": "0.21.x"
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.1.0",
+    "expect": "^22.1.0",
+    "flow-bin": "^0.63.1",
+    "jest": "^22.1.4",
+    "lazyj": "0.0.9",
+    "nwb": "0.21.x",
+    "regenerator-runtime": "^0.11.1"
   },
   "author": "",
   "homepage": "",
   "license": "MIT",
-  "repository": ""
+  "repository": "",
+  "babel": {
+    "presets": [ "env" ]
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!lodash-es)"
+    ]
+  }
 }

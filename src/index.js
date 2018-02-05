@@ -1,1 +1,1 @@
-export default 'Welcome to matcher'
+export default 'Welcome to matcher';
