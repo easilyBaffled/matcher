@@ -5,14 +5,16 @@
  *********************************************************************************************************************/
 "use strict";
 
-import type from 'type-detect';
 import assertType from './assertType';
 
 // Turns 'string'.endsWith( 'g' ) to endsWith( 'g' )( 'string' )
-const defaultFunc = functionName => testVal => prototypeObj => {
-    if( prototypeObj.prototype.constructor.name !== type( testVal ) )
-        throw TypeError( 'Mismatched types' );
-    return prototypeObj[ functionName ]( testVal );
+const defaultFunc = ( functionName, parentType ) => {
+    if( !( parentType[ functionName ] ) )
+        throw TypeError( `${functionName} is not a function in ${parentType}` );
+
+    return testVal => prototypeObj => (
+            prototypeObj[ functionName ]( testVal )
+    );
 };
 
 /**
@@ -38,14 +40,12 @@ export default function memoizedPrototypeProxy( baseObject = {}, memo = {}, func
             memo,
             get( target, name ) 
             {
-                const isMemoized = name in this.memo;
-                const memoizedIsNotAFunction = isMemoized && type( this.memo[ name ] ).toLowerCase() !== 'function';
+                if( [ 'constructor' ].includes( name ) )
+                    return target[ name ];
 
-                if ( !isMemoized || memoizedIsNotAFunction )
-                    this.memo[ name ] = func( name );
-
-                else
-                    return this.memo[ name ];
+                if ( !(name in this.memo) )
+                    this.memo[ name ] = func( name, target );
+                return this.memo[ name ];
             }
         }
     );

@@ -3,7 +3,7 @@
  * @authors Danny Michaelis <daniel.michaelis@iongroup.com>,
  * @date 23-Jan-2018
  *********************************************************************************************************************/
-"use strict";
+
 /**
  * Used as a default parameter to force parameters to be required
  *

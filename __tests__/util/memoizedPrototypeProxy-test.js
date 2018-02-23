@@ -14,27 +14,31 @@ class Test {
 }
 
 const memo = {
-    memoFunc() {
-        return 'memoFunc'
+    func() {
+        return 'test'
     }
 }
 
 testGroup( proxy, {
     '': () => {
-        //console.log(proxy( String ));
-        // const eg = expectGroup()
-        //     ( proxy( String ) )` -> ${String.prototype}`
-        //     ( proxy( String ) )`  -> ${String.prototype}`
-        //     ( () => proxy( '' ) )` toThrow ${TypeError}`
-        //     ( proxy( Test.prototype ) )`  -> ${Test.prototype}`
-        //     ( proxy( Test ) )`  -> ${Test.prototype}`
-        //     ( proxy( {} ) )`  -> ${{}}`;
-        //
-        // const s =  proxy( String, memo );
-        //
-        //     eg( s.endsWith( 'g' )( 'string' ) )` -> true`
-        //     ( s.startsWith( 'g' )( 'string' ) )` -> false`;
-        //
-        // console.log( memo )
+        const eg = expectGroup()
+            ( proxy( String ) )` toBeInstanceOf ${Object}`
+            ( () => proxy( String.prototype ) )` toThrow ${TypeError}`
+            ( proxy( String ).constructor.name )` -> "String"`
+            ( proxy( Test.prototype ).constructor.name )` -> "Test"`
+            ( proxy( Test ).constructor.name )` -> "Test"`
+            ( () => proxy( '' ) )`  toThrow ${TypeError}`
+            ( proxy( {} ) !== {} )` -> true`;
+
+        const s =  proxy( String, memo );
+
+        eg
+            ( Object.keys( memo ) )` -> ${['func']} `
+            ( typeof s.endsWith )` -> "function" `
+            ( typeof s.endsWith('g') )` -> "function" `
+            ( s.endsWith( 'g' )( 'string' ) )` -> true`
+            ( s.startsWith( 'g' )( 'string' ) )` -> false`
+            ( Object.keys( memo ) )` -> ${["func", "endsWith", "startsWith"]} `
+            ( () => s.notReal )` toThrow`
     }
 } );

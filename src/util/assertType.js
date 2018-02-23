@@ -12,11 +12,10 @@ import isEmpty from 'lodash-es/isEmpty';
 import R from './required';
 /**
  * Test if the target value is of the proper type using type-detect
- * Will throw an error the types don't match
+ * Will return an error the types don't match
  * @param { Object.<any> } targetObject - An object { nameOfValue: ValueToTest } so nameOfValue can be used in the error message
  * @param {string} name - name of the type to check against
- * @returns {boolean}
- * @throws {TypeError}
+ * @returns {boolean|TypeError}
  */
 export function testValue( targetObject = R( 'targetObject' ), name = R( 'name' ) )
 {
@@ -33,7 +32,7 @@ export function testValue( targetObject = R( 'targetObject' ), name = R( 'name' 
     else
     {
         const err = new TypeError( `${key} must be type ${name} instead it was a ${type( value )}` );
-        err.stack = err.stack.replace( /\n([^\n]+)/, '' ).replace( /\n([^\n]+)/, '' ); // Remove the line referring to this file from the stack trace
+        err.stack = err.stack.replace( /\n([^\n]+)/, '' ).replace( /\n([^\n]+)/, '' ).replace( /\n([^\n]+)/, '' ).replace( /\n([^\n]+)/, '' ); // Remove the line referring to this file from the stack trace
         return err;
     }
 }

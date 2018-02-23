@@ -5,22 +5,31 @@
  *********************************************************************************************************************/
 "use strict";
 
-function patternMatch( target, patternSet ) 
-{
-    let result = !pred.isA.array( patternSet[patternSet.length - 1] ) ?
-        patternSet[patternSet.length - 1]
-        : patternSet.filter( entry => !pred.isA.array( entry ) )[0];
+import partition from 'lodash-es/partition';
+import { isA } from './predicateFunctions';
+import match from './match';
 
-    for ( let entry of patternSet ) 
+/**
+ * Matches an object against a list of test sets returning the reward from the first set that matches
+ * @param {object} target
+ * @param {object} patternSet
+ */
+export default function patternMatch( target, patternSet )
 {
+    let [ matchers, defaultValue ] = partition( patternSet, matcher => isA.array( matcher ) );
+    let result = defaultValue[ 0 ];
+
+    for ( let entry of matchers )
+    {
         let res = match( target, ...entry );
 
         if ( res ) 
-{
+        {
             result = res;
             break;
         }
     }
+
     return result;
 }
 
